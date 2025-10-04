@@ -1,14 +1,17 @@
 // src/api.js
-import API_BASE_URL from "./config";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "https://silkworm-backend.onrender.com";
 
 const tokenKey = "seri_token";
 
+// --- TOKEN HELPERS ---
 export function setToken(token) {
   localStorage.setItem(tokenKey, token);
 }
+
 export function getToken() {
   return localStorage.getItem(tokenKey);
 }
+
 export function clearToken() {
   localStorage.removeItem(tokenKey);
 }
@@ -18,6 +21,7 @@ function authHeader() {
   return t ? { Authorization: `Bearer ${t}` } : {};
 }
 
+// --- UTILITY ---
 async function checkResponse(res) {
   const text = await res.text();
   let data;
@@ -26,8 +30,8 @@ async function checkResponse(res) {
   return data;
 }
 
+// --- AUTH ---
 export async function signup(payload) {
-  // payload: { name, email, password, phone, village, language }
   const res = await fetch(`${API_BASE_URL}/auth/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -42,35 +46,27 @@ export async function login(email, password) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-  return checkResponse(res); // expected { token, user }
+  return checkResponse(res);
 }
 
+// --- UPLOAD IMAGE ---
 export async function uploadImage(file) {
-  // file: File object from <input type="file">
   const fd = new FormData();
   fd.append("image", file);
 
   const res = await fetch(`${API_BASE_URL}/upload`, {
     method: "POST",
-    headers: {
-      ...authHeader()
-      // DO NOT set 'Content-Type' when sending FormData — browser sets it
-    },
+    headers: authHeader(), // include token
     body: fd,
   });
-  return checkResponse(res); // expected { label, confidence, filename, ... }
+
+  return checkResponse(res);
 }
 
-export async function getUploads() {
-  const res = await fetch(`${API_BASE_URL}/uploads`, {
-    headers: { ...authHeader() },
-  });
-  return checkResponse(res); // expected array of uploads
-}
-
-export async function getUsers() {
-  const res = await fetch(`${API_BASE_URL}/users`, {
-    headers: { ...authHeader() },
+// --- GET UPLOAD HISTORY ---
+export async function getHistory() {
+  const res = await fetch(`${API_BASE_URL}/upload/history`, {
+    headers: authHeader(),
   });
   return checkResponse(res);
 }
