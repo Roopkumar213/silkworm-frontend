@@ -519,7 +519,7 @@ const Login = ({ onNavigate, onLogin }) => {
     setAlert(null);
     
     try {
-      const response = await fetch(`${'https://silkworm-backend.onrender.com:'}/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -528,7 +528,7 @@ const Login = ({ onNavigate, onLogin }) => {
       const data = await response.json();
       
       if (response.ok) {
-        onLogin(data.token, data.user);
+  onLogin(data.data.token, data.data.user);
       } else {
         setAlert({ type: 'error', message: data.message || 'Login failed' });
       }
@@ -1070,7 +1070,7 @@ const FarmerDashboard = ({ user, onLogout }) => {
       });
 
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:8000/predict', {
+      const response = await fetch(`${API_BASE_URL}/upload/predict`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

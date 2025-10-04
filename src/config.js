@@ -1,4 +1,8 @@
-// src/api.js
+export const API_BASE_URL = process.env.REACT_APP_API_URL || "https://silkworm-backend.onrender.com";
+
+// Also add ML service URL
+export const ML_API_URL = process.env.REACT_APP_ML_URL || "https://silkworm-ml.onrender.com";
+
 const API_BASE_URL = process.env.REACT_APP_API_URL || "https://silkworm-backend.onrender.com";
 
 const tokenKey = "seri_token";
