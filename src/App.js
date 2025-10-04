@@ -2274,7 +2274,47 @@ const FarmerDashboard = ({ user, onLogout }) => {
   );
 };
 
-//hello
+function App() {
+  const [currentView, setCurrentView] = useState('login');
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const savedUser = localStorage.getItem('userData');
+    
+    if (token && savedUser) {
+      setUser(JSON.parse(savedUser));
+      setCurrentView('dashboard');
+    }
+  }, []);
+
+  const handleLogin = (token, userData) => {
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('userData', JSON.stringify(userData));
+    setUser(userData);
+    setCurrentView('dashboard');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    setUser(null);
+    setCurrentView('login');
+  };
+
+  const handleNavigate = (view) => {
+    setCurrentView(view);
+  };
+
+  return (
+    <>
+      {currentView === 'signup' && <SignUp onNavigate={handleNavigate} />}
+      {currentView === 'login' && <Login onNavigate={handleNavigate} onLogin={handleLogin} />}
+      {currentView === 'dashboard' && <FarmerDashboard user={user} onLogout={handleLogout} />}
+    </>
+  );
+}
 
 
-export default FarmerDashboard;
+
+export default App;
