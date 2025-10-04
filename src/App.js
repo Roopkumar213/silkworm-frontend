@@ -5,7 +5,7 @@ import Result from  "./Components/Result"
 // ============================================
 // API Configuration
 // ============================================
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://silkworm-backend.onrender.com';
 
 // ============================================
   const SignUp = ({ onNavigate }) => {
@@ -519,7 +519,7 @@ const Login = ({ onNavigate, onLogin }) => {
     setAlert(null);
     
     try {
-      const response = await fetch(`${'http://localhost:5000'}/auth/login`, {
+      const response = await fetch(`${'https://silkworm-backend.onrender.com:'}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
